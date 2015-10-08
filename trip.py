@@ -6,6 +6,8 @@ __author__ = 'Dassa'
 
 class Error(Exception):
     # Use this class to raise exceptions when code generates a runtime error
+    def __init__(self, value):
+        super().__init__(value)
     # Exceptions must have appropriate descriptions for the Exception.value field
     pass
 
