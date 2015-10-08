@@ -19,7 +19,7 @@ def convert(amount, home_currency_code, location_currency_code):
         parts = strip_result.split(">")
         split_parts = parts[2].split(" ")
         result = float(split_parts[0])
-    except ValueError:
+    except:
         result = -1
     return result
 
