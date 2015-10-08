@@ -6,106 +6,59 @@ import urllib
 from urllib.request import urlopen
 from urllib.error import URLError
 
+# Convert function
+def convert(amount, home_currency_code, location_currency_code):
+    # url specific for any provided amount, home and location currency codes.
+    url = "https://www.google.com/finance/converter?a=" + str(amount) + "&from=" + str(home_currency_code) + "&to=" + str(location_currency_code) + "&meta=ei%3Db-INVuGzDsy60gSThqFg"
+    # returns the information provided by the given url
+    result = web_utility.load_page(url)
+    # initial shortening of result
+    strip_result = (result[result.index('result'):])
+    parts = strip_result.split(">")
+    split_parts = parts[2].split(" ")
+    return_amount = split_parts[0]
+    return return_amount
 
-# def convert(amount, home_currency_code, location_currency_code):
-#     url = "https://www.google.com/finance/converter?a=" + str(amount) + "&from=" + str(home_currency_code) + "&to=" + str(location_currency_code) + "&meta=ei%3Db-INVuGzDsy60gSThqFg"
-#     result = web_utility.load_page(url)
-#     strip_result = (result[result.index('result'):])
-#     print(strip_result)
-#     strip_result_2 = strip_result.replace(">\n<","" )
-#     print(strip_result_2)
-#     return result
-#
-#
-# convert(1, "AUD", "USD")
+    # TODO if function is used incorrectly, return the value '-1'
 
+# Convert function Trial
+# set parameters
+amount = ""      # returns as if = 1 when a string of letters is inserted
+home_currency_code = "USD"
+location_currency_code = "SCR"
+# call function
+print(convert(amount, home_currency_code, location_currency_code))
+# print function
 
-# tutorname = "trevor andersen"
+# # input parameters
+# return_amount = convert(input("amount: "), input("home_currency_code: "), input("location_currency_code: "))
+# # print function
+# print(return_amount)
 
-
-
-
-        ## get a string input from the user for the value of the money they wish to convert
-        ## Convert string input to float value
-        ## Store input under the variable name currency_amount_input
-# currency_amount_input = float(input("Currency Amount Input: "))
-#         ## For testing: Bypasses user input
-# currency_amount_input = float(1)
-# #     ValueError
-#
-#         ## get a string input from the user for the name of the country
-# # inputcountrycode = input("Country Code From: ")
-# # outputcountrycode = input("Country Code To: ")
-#
-#
-# inputcountrycode = "AUD"
-# outputcountrycode = "USD"
-#
-# url = "https://www.google.com/finance/converter?a=" + str(currency_amount_input) + "&from=" + inputcountrycode + "&to=" + outputcountrycode + "&meta=ei%3Db-INVuGzDsy60gSThqFg"
-# print (url)
-#
-# # f = urllib.urlopen(link)
-# # myfile = f.read()
-# # print (myfile)
-# # print(link)
-#
-
-#
-#
+# Get Details function
 def get_details(country_name):
-    country_name = ""
-    currency_details = open("currency_detail.txt", mode="r", encoding="utf-8")
-    file_contents = currency_details.read()
+    # set empty variables
+    finish = False      # consider: running / looking = True (affirmative boolean)
+    i = 0       # position variable
+    country_details_list = None
+    # open currency_details.txt file in read only mode
+    currency_details = open("currency_details.txt", mode="r", encoding="utf-8")
 
+    for line in currency_details.readlines():
+            parts = line.strip().split(",")
+            if parts[0] == country_name:
+                country_details_ea = tuple(parts)
+                return country_details_ea
 
-
-currency_details = open("currency_detail.txt", mode="r", encoding="utf-8")
-country_name = input("Country name: ")
-
-finish = ""
-country_details = ""
-i = 0
-while document_end == "":
-    if country_name in currency_details.readline():
-        finish = "True"
-            # refresh currency_details file
-        currency_details.close()
-        currency_details.open("currency_detail.txt", mode="r", encoding="utf-8")
-        currency_details = currency_details.readlines(
-    else:
-        i += 1
-
-if country_details == ""
-    # TODO Error message
-else:
-    print(country_details[i])
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# # Get Details function trial
+# # Set parameters
+# country_name = "United States"      # use title() method
+# # Call function
+# country_details_ea = get_details(country_name)
+# # Print function
+# print(country_details_ea)
+#
+# # input parameters
+# country_details_ea = get_details(input("country_name: "))
+# # Print function
+# print(country_details)
