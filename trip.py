@@ -23,8 +23,11 @@ class Country:
         return "{} {} {}".format(str(self.country_name), str(self.currency_code), str(self.currency_symbol))
 
     def format_currency(self, amount):
-        # Format amount to be presented as %X.XX where % is the
-        return self.currency_symbol + str(format(float(amount), '.2f'))
+        # Format amount to be presented as %X.XX where % is the amount
+        try:
+            return self.currency_symbol + str(format(float(amount), '.2f'))
+        except ValueError:
+            raise Error("Invalid amount")
 
 
 class Details:
@@ -49,6 +52,11 @@ class Details:
             raise Error("Duplicate Trip")
         if start_date > end_date:
             raise Error("Invalid date")
+        # raise error if dates overlap
+        for trip in self.locations:
+            for thing in trip:
+                if start_date <= thing <= end_date:
+                    raise Error("Invalid date")
         self.locations.append(trip_details)
 
     def current_country(self, date_string):
@@ -70,12 +78,51 @@ class Details:
 # Testing
 def main():
     print("Check Country Class")
-    print("Format: Australia, AUD, $, amount = 100  " + Country("Australia", "AUD", "$").format_currency(100))
+    print("Valid format     Format: Australia,      AUD, $, amount = 100      " + Country("Australia", "AUD", "$").format_currency(100))
+    print("Valid format     Format: United States,  USD, $, amount = 42.43    " + Country("United States", "USD", "$").format_currency(42.43))
+    print("Valid format     Format: Slovenia,       EUR, €, amount = 199.9    " + Country("Slovenia", "USD", "€").format_currency(199.9))
+    try:
+        print("Valid format   Format: Australia,      AUD, $, amount = abc       " + Country("Australia", "AUD", "abc").format_currency(abc))
+    except:
+        print("Invalid format   Format: Australia,      AUD, $, amount = abc      Error: Invalid Amount")
+
     print("\nCheck Details Class")
     details = Details()
-    details.add("Australia", "2000/01/01", "2015/01/01")
-    print(details.locations)
-# TODO further error checking
-# use a try/except for the invalid things that raise errors...
+    print("Empty locations                                          ", details.locations)
+    details.add("Australia", "2002/01/01", "2003/01/01")
+    print("Valid addition       Australia, 2002/01/01, 2003/01/01   ", details.locations)
+    details.add("Japan", "2004/02/23", "2004/02/24")
+    print("Valid addition       Japan, 2004/02/23, 2004/02/24       ", details.locations)
+    try:
+        details.add("Japan", "2004/02/23", "2004/02/24")
+        print("Valid addition       ", details.locations)
+    except:
+        print("Invalid addition     Japan, 2004/02/23, 2004/02/24        Duplicate trip")
+
+    details.add("Japan", "2005/02/23", "2005/02/24")
+    print("Valid addition       Japan, 2005/02/23, 2005/02/24       ", details.locations)
+    try:
+        details.add("France", "2004/02/23", "2004/02/24")
+        print("Valid addition       ", details.locations)
+    except:
+        print("Invalid addition     France, 2004/02/23, 2004/02/24       Invalid Dates")
+    try:
+        details.add("France", "06/12/07", "2006/12/13")
+        print("Valid addition       ", details.locations)
+    except:
+        print("Invalid addition     France, 06/12/07, 2006/12/13         Invalid Dates")
+    try:
+        details.add("Australia", "2006/01/02", "2006/Ja/04")
+        print("Valid addition       ", details.locations)
+    except:
+        print("Invalid addition     Australia, 2006/01/02, 2006/Ja/04    Invalid Dates")
+    try:
+        details.add("Germany", "2006/12/02", "2006/01/04")
+        print("Valid addition       ", details.locations)
+    except:
+        print("Invalid addition     Germany, 2006/12/02, 2006/01/04      Invalid Dates")
+    details.add("Germany", "2005/12/02", "2006/01/04")
+    print("Valid addition       Germany, 2005/12/02, 2006/01/04     ", details.locations)
+
 if __name__ == "__main__":
     main()
