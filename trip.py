@@ -1,8 +1,4 @@
-import currency
 __author__ = 'Dassa'
-
-# Attributes: responsible for knowing. Instance Variables
-# Methods: responsible for doing.
 
 
 class Error(Exception):
@@ -75,6 +71,7 @@ class Details:
     def is_empty(self):
         return self.locations == []
 
+
 # Testing
 def main():
     print("Check Country Class")
@@ -82,15 +79,17 @@ def main():
     print("Valid format     Format: United States,  USD, $, amount = 42.43    " + Country("United States", "USD", "$").format_currency(42.43))
     print("Valid format     Format: Slovenia,       EUR, €, amount = 199.9    " + Country("Slovenia", "USD", "€").format_currency(199.9))
     try:
-        print("Valid format   Format: Australia,      AUD, $, amount = abc       " + Country("Australia", "AUD", "abc").format_currency(abc))
+        print("Valid format   Format: Australia,      AUD, $, amount = abc       " + Country("Australia", "AUD", "abc").format_currency("abc"))
     except:
         print("Invalid format   Format: Australia,      AUD, $, amount = abc      Error: Invalid Amount")
 
     print("\nCheck Details Class")
     details = Details()
     print("Empty locations                                          ", details.locations)
+    print("is empty:           ", details.is_empty())
     details.add("Australia", "2002/01/01", "2003/01/01")
     print("Valid addition       Australia, 2002/01/01, 2003/01/01   ", details.locations)
+    print("is empty:           ", details.is_empty())
     details.add("Japan", "2004/02/23", "2004/02/24")
     print("Valid addition       Japan, 2004/02/23, 2004/02/24       ", details.locations)
     try:
